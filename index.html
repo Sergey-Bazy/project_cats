@@ -16,10 +16,14 @@
     />
   </head>
   <body>
-    <div class="container he-5">
+    <div class="container py-5">
       <h1 class="text-center mb-3">Cats api test</h1>
 
-      <div class="d-flex justify-content-center nm-5">
+      <div data-spinner class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+
+      <div class="d-flex justify-content-center mb-3">
         <button type="button" data-add_button="add" class="btn btn-success">
           Add Cat
         </button>

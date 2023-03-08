@@ -1,6 +1,7 @@
 const $wraper = document.querySelector("[data-wr]"); // $wraper - принято называть все DOM-элементы в начале через$
 const $addBtn = document.querySelector("[data-add_button]");
 const $modalAdd = document.querySelector("[data-modal]");
+const $spinner = document.querySelector("[data-spinner]");
 const $formErrorMsg = document.querySelector("[data-modal]");
 
 const HIDDEN_CLASS = "hidden";
@@ -19,6 +20,9 @@ const generateCatCard = (cat) => {
         <button type="button"  data-action ="open" class="btn btn-primary">Open</button>
         <button type="button"  data-action ="edit"class="btn btn-warning">Edit</button>
         <button type="button"  data-action ="delete"class="btn btn-danger">Delete</button>
+        <button type="button"  data-action ="info"class="btn btn-${
+          cat.favorite ? "success" : "dark"
+        }">Info</button>
       </div>
     </div>`;
 };
@@ -44,12 +48,14 @@ $wraper.addEventListener("click", async (event) => {
   //   console.log(event.target.dataset.action);
   const action = event.target.dataset.action;
 
+  if (event.target === $wraper) return;
+  const $currentCard = event.target.closest("[data-card_id]");
+  const catId = $currentCard.dataset.card_id;
+
   switch (action) {
     case "delete":
-      const $currentCard = event.target.closest("[data-card_id]");
-      const catId = $currentCard.dataset.card_id;
       try {
-        const res = await api.deleteCat(catId);
+        const res = await api.putCat(catId);
         const response = await res.json();
         if (!res.ok) throw Error(response.message);
         $currentCard.remove();
@@ -70,6 +76,18 @@ $wraper.addEventListener("click", async (event) => {
       // форма уже предзаполнена информацией о коте
       break;
 
+    case "info":
+      // если favorite,то класс должен быть success, если нет, то dark
+      const res = await api.deleteCat(id);
+      if (res.ok) {
+        if (event.target.className === "btn btn-dark") {
+          event.target.className = "btn btn-success";
+        } else {
+          event.target.className = "btn btn-dark";
+        }
+      }
+      break;
+
     default:
       break;
   }
@@ -79,11 +97,9 @@ $addBtn.addEventListener("click", (event) => {
   $modalAdd.classList.remove(HIDDEN_CLASS); // открываем модалку
 });
 
-//addEventListener по закрытию модалки
-
 document.forms.add_cat_form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  $formErrorMsg.innerText = '';
+  $formErrorMsg.innerText = "";
   const data = Object.fromEntries(new FormData(event.target).entries());
 
   data.id = Number(data.id);
@@ -127,9 +143,54 @@ const GetCatsFunc = async () => {
     return $wraper.appendChild($notificationMessage);
   }
 
-  data.forEach((cat) => {
-    $wraper.insertAdjacentHTML("afterbegin", generateCatCard(cat));
-  });
+  console.log(data);
+
+  setTimeout(() => {
+    $spinner.classList.add(HIDDEN_CLASS);
+    data.forEach((cat) => {
+      $wraper.insertAdjacentHTML("afterbegin", generateCatCard(cat));
+    });
+  }, 1000);
 };
 
 GetCatsFunc();
+
+// закрытие модалки по области,escape, кнопи крестика в углу
+// сохранять форуму дополнения в LC
+// обработать все ошибки со всех запросов
+// возможгось обговления кота
+// подробная информация о коте (модалка/отдельная страница)
+// окультурить spinner
+// cделать красивую страницу
+// мобильную веостку
+
+const wait1s = (delay) => {
+  return new Promise((resolve) => setTimeout(() => resolve, delay));
+};
+
+const customFetch = async (url, option = { method: "GET" }, counter = 3) => {
+  do {
+    counter--;
+    try {
+      const res = await fetch(url, { ...option });
+
+      if (!res.ok) throw new Error();
+
+      if (res.status === 400) throw new Error();
+
+      const resData = await res.json();
+
+      return resData;
+    } catch (error) {}
+
+    await wait(3000);
+  } while (counter > 0);
+
+  return data;
+};
+
+customFetch(
+  "https://cats.petiteweb.dev/api/single/Sergey-Bazy/show",
+  { method: "GET" },
+  3
+).then((res) => console.log(res));
