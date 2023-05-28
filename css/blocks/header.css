@@ -1,0 +1,15 @@
+.header {
+    box-shadow: 0 0 2px 0 var(--bg-secondary-color);
+    background-color: bisque;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-weight: 900;
+    box-shadow: 0 0 50px 0 rgba(241, 205, 149, 0.74) 
+}
+
+.header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}

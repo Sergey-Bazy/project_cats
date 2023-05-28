@@ -1,0 +1,17 @@
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    font-size: 18px;
+    padding: 12px 13px;
+    border: none;
+    gap: 10px;
+    background-color: var(--bg-secondary-color);
+    color: var(--text-light-color);
+    outline: none;
+}
+
+.btn:hover, .btn:focus{
+    background-color: rgb(5, 90, 187);
+}

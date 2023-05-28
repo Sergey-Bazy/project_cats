@@ -1,0 +1,8 @@
+.socials {
+    display: flex;
+    gap: 10px;
+}
+
+.socials__link {
+color: rgb(6, 21, 240);
+}
