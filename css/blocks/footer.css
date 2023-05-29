@@ -1,12 +1,12 @@
 .footer {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    box-shadow: 0 0 2px 0 var(--bg-secondary-color);
-    background-color: bisque;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  box-shadow: 0 0 2px 0 var(--bg-secondary-color);
+  background-color: royalblue;
 }
 
 .footer__container {
-    display:inline-block;
-    align-items: center;
-    justify-content: space-between;
+  display: inline-block;
+  align-items: center;
+  justify-content: space-between;
 }
